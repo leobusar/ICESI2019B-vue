@@ -1,28 +1,92 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+      <v-content class="dogs-layout">
+        <v-container fill-height>
+          <div class="dogs-overlay">
+            <h1 class="display-2 text-xs-center">Choose your favorite dogs</h1>
+            <v-card class="dog-card">
+                <v-img
+                  height="400px"
+                  :src="currentDogLink"></v-img>
+              <v-card-actions>
+                <v-btn icon>
+                  <v-icon>favorite</v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn icon>
+                  <v-icon>forward</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </div>
+        </v-container>
+      </v-content>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from './components/HelloWorld';
+import axios from 'axios';
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+  },
+  data(){
+      return {
+        currentDogLink: "https://images.dog.ceo/breeds/chihuahua/n02085620_3407.jpg"
+      };
+
+  },
+  created() {
+    this.loadNewDog();
+  },
+  methods: {
+    loadNewDog() {
+      axios.get('https://dog.ceo/api/breeds/image/random')
+      .then(response => 
+            this.currentDogLink = response.data.message
+      )
+      .catch(error => {
+        console.log(error);
+      });
+    } 
+  }
+};
+</script>
+<style>
+img {
+  max-width: 100%;
+}
+
+h1 {
+  padding-bottom: 15px;
+}
+
+.dogs-layout {
+  width: 100%;
+  background: #fff center repeat;
+  background-image: url("https://github.com/VueVixens/projects/blob/master/petshop/images/bg3.jpg?raw=true");
+}
+
+.dogs-overlay {
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .dogs-overlay {
+    margin: 0;
   }
 }
-</script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.dog-card {
+  width: 100%;
+  max-width: 600px;
 }
 </style>
