@@ -9,15 +9,33 @@
                   height="400px"
                   :src="currentDogLink"></v-img>
               <v-card-actions>
-                <v-btn icon>
+                <v-btn icon @click="addToFavorites" :disabled="isAlreadyInFavorites">
                   <v-icon>favorite</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn icon>
+                <v-btn icon @click="loadNewDog">
                   <v-icon>forward</v-icon>
                 </v-btn>
               </v-card-actions>
             </v-card>
+            <v-container grid-list-md fluid>
+              <v-layout wrap>
+               <v-flex xs6 sm4 md2 v-for="(pet, index) in favoriteDogs" :key="pet">
+                  <v-card class="dog-card">
+                    <v-img
+                      height="150px"
+                      :src="pet"></v-img>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn icon @click="removeFromFavorites(index)">
+                        <v-icon>delete</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+
           </div>
         </v-container>
       </v-content>
@@ -35,12 +53,19 @@ export default {
   },
   data(){
       return {
-        currentDogLink: "https://images.dog.ceo/breeds/chihuahua/n02085620_3407.jpg"
+        currentDogLink: "https://images.dog.ceo/breeds/chihuahua/n02085620_3407.jpg",
+        favoriteDogs: []
       };
 
   },
   created() {
     this.loadNewDog();
+    
+  },
+  computed: {
+    isAlreadyInFavorites() {
+      return this.favoriteDogs.indexOf(this.currentDogLink) > -1;
+    }
   },
   methods: {
     loadNewDog() {
@@ -51,7 +76,13 @@ export default {
       .catch(error => {
         console.log(error);
       });
-    } 
+    },
+    addToFavorites() {
+      this.favoriteDogs.push(this.currentDogLink);
+    },
+    removeFromFavorites(index) {
+      this.favoriteDogs.splice(index, 1);
+    }
   }
 };
 </script>
