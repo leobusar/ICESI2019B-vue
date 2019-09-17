@@ -21,17 +21,7 @@
             <v-container grid-list-md fluid>
               <v-layout wrap>
                <v-flex xs6 sm4 md2 v-for="(pet, index) in favoriteDogs" :key="pet">
-                  <v-card class="dog-card">
-                    <v-img
-                      height="150px"
-                      :src="pet"></v-img>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn icon @click="removeFromFavorites(index)">
-                        <v-icon>delete</v-icon>
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
+                 <app-dog :dog="pet" @remove="removeFromFavorites(index)" ></app-dog>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -43,13 +33,15 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 import axios from 'axios';
+import appDog from './components/Dog';
 
 export default {
+
+
   name: 'App',
   components: {
-    HelloWorld,
+    appDog,
   },
   data(){
       return {
